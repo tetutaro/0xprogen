@@ -52,4 +52,8 @@ if [ -d nerd-fonts ]; then
         ${FONTFORGE_PYTHON} ./rename.py --outputdir ${FONTS_DIR} "${progen}"
         rm -f "${progen}"
     done
+else
+    for progen in 0xProGen*.ttf; do
+        rm -f ${progen}
+    done
 fi

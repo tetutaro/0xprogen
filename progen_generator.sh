@@ -1,28 +1,47 @@
 #!/bin/sh
 
-PROGEN_VERSION="0.1.0"
+# basic information
+PROGEN_VERSION="0.2.0"
 PROGEN_FAMILYNAME="0xProGen"
 
+# path of fontforge command
 FONTFORGE_COMMAND="/usr/bin/fontforge"
 
+# temporally flag
 leaving_tmp_flag="false"
 
+# null device
 redirection_stderr="/dev/null"
+
+# path of original fonts
 input_proto_regular="0xProto-Regular.ttf"
-modified_proto_regular="Modified-0xProto-Regular.sfd"
-modified_proto_generator="modified_proto_generator.pe"
-zenkaku_proto_regular="Zenkaku-0xProto-Regular.sfd"
-zenkaku_proto_generator="zenkaku_proto_generator.pe"
 input_hackgen_regular="HackGen-Regular.ttf"
+
+# intermediate fonts
 comma_hackgen_regular="Comma-HackGen-Regular.sfd"
 period_hackgen_regular="Period-HackGen-Regular.sfd"
 colon_hackgen_regular="Colon-HackGen-Regular.sdf"
+modified_proto_regular="Modified-0xProto-Regular.sfd"
+zenkaku_comma_regular="Zenkaku-Comma-Regular.sfd"
+zenkaku_period_regular="Zenkaku-Period-Regular.sfd"
+zenkaku_colon_regular="Zenkaku-Colon-Regular.sfd"
+zenkaku_proto_regular="Zenkaku-0xProto-Regular.sfd"
 modified_hackgen_regular="Modified-HackGen-Regular.sfd"
+
+# fontforge scripts
+comma_hackgen_generator="comma_hackgen_generator.pe"
+period_hackgen_generator="period-hackgen_generator.pe"
+colon_hackgen_generator="colon_hackgen_generator.pe"
+modified_proto_generator="modified_proto_generator.pe"
+zenkaku_comma_generator="zenkaku_comma_generator.pe"
+zenkaku_period_generator="zenkaku_period_generator.pe"
+zenkaku_colon_generator="zenkaku_colon_generator.pe"
+zenkaku_proto_generator="zenkaku_proto_generator.pe"
 modified_hackgen_generator="modified_hackgen_generator.pe"
-progen_generator="progu_generator.pe"
+progen_generator="progen_generator.pe"
 
 # Check fontforge existance
-if ! which ${FONTFORGE_COMMAND} > /dev/null 2>&1
+if ! which ${FONTFORGE_COMMAND} > ${redirection_stderr} 2>&1
 then
     echo "Error: ${FONTFORGE_COMMAND} command not found" >&2
     exit 1
@@ -31,9 +50,9 @@ fi
 # Make temporary directory
 if [ -w "/tmp" -a "${leaving_tmp_flag}" = "false" ]
 then
-    tmpdir=`mktemp -d /tmp/progu_generator.XXXXXX` || exit 2
+    tmpdir=`mktemp -d /tmp/progen_generator.XXXXXX` || exit 2
 else
-    tmpdir=`mktemp -d ./tmpdir_progu_generator.XXXXXX`    || exit 2
+    tmpdir=`mktemp -d ./tmpdir_progen_generator.XXXXXX`    || exit 2
 fi
 
 # Remove temporary directory by trapping
@@ -46,6 +65,102 @@ else
 fi
 
 ########################################
+# extract comma from HackGen
+########################################
+
+cat > ${tmpdir}/${comma_hackgen_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${comma_hackgen_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Clear other glyphs
+    Select(0u002c); SelectInvert(); Clear()
+    # Adjust
+    Select(0u002c); Move(-20, 0); SetWidth(500)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
+# extract period from HackGen
+########################################
+
+cat > ${tmpdir}/${period_hackgen_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${period_hackgen_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Clear other glyphs
+    Select(0u002e); SelectInvert(); Clear()
+    # Adjust
+    Select(0u002e); Move(-20, 0); SetWidth(500)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
+# extract colon and semi-colon from HackGen
+########################################
+
+cat > ${tmpdir}/${colon_hackgen_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${colon_hackgen_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Clear other glyphs
+    Select(0u003a, 0u003b); SelectInvert(); Clear()
+    # Adjust
+    Select(0u003a, 0u003b); Move(-20, 0); SetWidth(500)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
 # Generate script for modified 0xProto
 ########################################
 
@@ -54,6 +169,9 @@ cat > ${tmpdir}/${modified_proto_generator} << _EOT_
 
 input_list = ["${input_proto_regular}"]
 output_list = ["${modified_proto_regular}"]
+comma_list = ["${tmpdir}/${comma_hackgen_regular}"]
+period_list = ["${tmpdir}/${period_hackgen_regular}"]
+colon_list = ["${tmpdir}/${colon_hackgen_regular}"]
 i = 0
 while (i < SizeOf(input_list))
     # Open
@@ -61,6 +179,12 @@ while (i < SizeOf(input_list))
     SelectWorthOutputting()
     UnlinkReference()
     ScaleToEm(800, 200)
+    # Remove comma, period, colon and semi-colon
+    Select(0u002c); Clear()
+    Select(0u002e); Clear()
+    Select(0u003a, 0u003b); Clear()
+    # Remove zenkaku basic symbols
+    Select(0uff01, 0uff5e); Clear();
     # Remove ambigous glyphs
     Select(0u00a1); Clear()
     Select(0u00a4); Clear()
@@ -253,10 +377,12 @@ while (i < SizeOf(input_list))
     Select(0ufffd); Clear()
     # Narrow all the width
     SelectWorthOutputting()
-    Scale(87, 100); Move(-40, 0); SetWidth(540)
+    Scale(80, 100); Move(-60, 0); SetWidth(500)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Remove zenkaku basic symbols
-    Select(0uff01, 0uff5e); Clear();
+    # Merge Hackgen's comma, period, colon and semi-colon
+    MergeFonts(comma_list[i])
+    MergeFonts(period_list[i])
+    MergeFonts(colon_list[i])
     # Clear instructions
     SelectWorthOutputting()
     ClearInstrs()
@@ -269,14 +395,14 @@ Quit()
 _EOT_
 
 ########################################
-# Generate script for zenkaku 0xProto
+# Generate script for Zenkaku Comma (HackGen)
 ########################################
 
-cat > ${tmpdir}/${zenkaku_proto_generator} << _EOT_
+cat > ${tmpdir}/${zenkaku_comma_generator} << _EOT_
 #!${FONTFORGE_COMMAND} -script
 
-input_list = ["${input_proto_regular}"]
-output_list = ["${zenkaku_proto_regular}"]
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${zenkaku_comma_regular}"]
 i = 0
 while (i < SizeOf(input_list))
     # Open
@@ -284,11 +410,119 @@ while (i < SizeOf(input_list))
     SelectWorthOutputting()
     UnlinkReference()
     ScaleToEm(800, 200)
-    # Copy and Paste
+    # Clear other glyphs
+    Select(0uff0c); SelectInvert(); Clear()
+    # Adjust
+    Select(0uff0c); Move(-30, 0); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
+# Generate script for Zenkaku Period (HackGen)
+########################################
+
+cat > ${tmpdir}/${zenkaku_period_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${zenkaku_period_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Clear other glyphs
+    Select(0uff0e); SelectInvert(); Clear()
+    # Adjust
+    Select(0uff0e); Move(-30, 0); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
+# Generate script for Zenkaku Colon and Semi-Colon (HackGen)
+########################################
+
+cat > ${tmpdir}/${zenkaku_colon_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list = ["${input_hackgen_regular}"]
+output_list = ["${zenkaku_colon_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Clear other glyphs
+    Select(0uff1a, 0uff1b); SelectInvert(); Clear()
+    # Adjust
+    Select(0uff1a, 0uff1b); Move(-30, 0); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear instructions
+    SelectWorthOutputting()
+    ClearInstrs()
+    # Save
+    Save("${tmpdir}/" + output_list[i])
+    Close()
+    i += 1
+endloop
+Quit()
+_EOT_
+
+########################################
+# Generate script for Zenkaku Alphabets (0xProto)
+########################################
+
+cat > ${tmpdir}/${zenkaku_proto_generator} << _EOT_
+#!${FONTFORGE_COMMAND} -script
+
+input_list        = ["${input_proto_regular}"]
+zcomma_list       = ["${tmpdir}/${zenkaku_comma_regular}"]
+zperiod_list      = ["${tmpdir}/${zenkaku_period_regular}"]
+zcolon_list       = ["${tmpdir}/${zenkaku_colon_regular}"]
+output_list       = ["${zenkaku_proto_regular}"]
+i = 0
+while (i < SizeOf(input_list))
+    # Open
+    Open(input_list[i])
+    SelectWorthOutputting()
+    UnlinkReference()
+    ScaleToEm(800, 200)
+    # Cut and Paste
     Select(0u0021, 0u007e); SelectInvert(); Clear()
     Select(0u0021, 0u007e); Copy(); Select(0uff01, 0uff5e); Paste()
-    Move(230, 0); SetWidth(1080)
-    Select(0u0021, 0u007e); Clear()
+    Move(190, 0); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    Select(0uff01, 0uff5e); SelectInvert(); Clear()
+    # Remove Zenkaku exclamation, question, comma, period, colon and semi-colon
+    Select(0uff0c); Clear()
+    Select(0uff0e); Clear()
+    Select(0uff1a, 0uff1b); Clear()
+    # Merge
+    MergeFonts(zcomma_list[i])
+    MergeFonts(zperiod_list[i])
+    MergeFonts(zcolon_list[i])
     # Clear instructions
     SelectWorthOutputting()
     ClearInstrs()
@@ -316,11 +550,10 @@ while (i < SizeOf(input_list))
     SelectWorthOutputting()
     UnlinkReference()
     ScaleToEm(800, 200)
-    # Move right and widen
+    # Adjust
     SelectWorthOutputting()
-    Move(6, 0); SetWidth(1080)
-    # Remove Zenkaku basic symbols
-    Select(0uff01, 0uff5e); Clear();
+    Scale(93, 100); Move(-30, 0); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear instructions
     SelectWorthOutputting()
     ClearInstrs()
@@ -341,8 +574,8 @@ cat > ${tmpdir}/${progen_generator} << _EOT_
 
 # Set parameters
 proto_list        = ["${tmpdir}/${modified_proto_regular}"]
-hackgen_list      = ["${tmpdir}/${modified_hackgen_regular}"]
 zenkaku_list      = ["${tmpdir}/${zenkaku_proto_regular}"]
+hackgen_list      = ["${tmpdir}/${modified_hackgen_regular}"]
 fontfamily        = "${PROGEN_FAMILYNAME}"
 fontfamilysuffix  = ""
 fontstyle_list    = ["Regular"]
@@ -350,6 +583,7 @@ fontweight_list   = [400,       700]
 panoseweight_list = [5,         8]
 copyright         = "Copyright (c) 2023 0xType\n" \\
                   + "Copyright (c) 2019 Yuko OTAWARA\n" \\
+                  + "Copyright (c) 2018 Source Foundry Authors\n" \\
                   + "Copyright (c) 2015 JIKASEI FONT KOUBOU"
 version           = "${PROGEN_VERSION}"
 
@@ -390,21 +624,27 @@ while (i < SizeOf(fontstyle_list))
     SetPanose([2, 11, panoseweight_list[i], 9, 2, 2, 3, 2, 2, 7])
     # Merge
     MergeFonts(proto_list[i])
-    MergeFonts(hackgen_list[i])
     MergeFonts(zenkaku_list[i])
-    # Edit zenkaku space
-    # - dotted circle
+    MergeFonts(hackgen_list[i])
+    # Edit Zenkaku Space (dotted circle)
     # Select(0u25cc); Copy(); Select(0u3000); Paste()
     # Edit en dash
     Select(0u2013); Copy()
-    PasteWithOffset(290, 0); PasteWithOffset(-290, 0)
-    OverlapIntersect(); SetWidth(1080)
+    PasteWithOffset(264, 0); PasteWithOffset(-264, 0)
+    OverlapIntersect(); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
     # Edit em dash
     Select(0u2014); Copy()
-    PasteWithOffset(450, 0); PasteWithOffset(-450, 0)
-    OverlapIntersect(); SetWidth(1080)
+    PasteWithOffset(410, 0); PasteWithOffset(-410, 0)
+    OverlapIntersect(); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
     # Edit zenkaku hyphen
-    Select(0uff0d); Copy(); Select(0u2010); Paste(); SetWidth(1080)
+    Select(0uff0d); Copy(); Select(0u2010); Paste(); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Edit katakana small "he"
+    Select(0u30d8); Copy(); Select(0u31f8); Paste()
+    Scale(79, 79, 450, 356); Move(0, -80); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
     # Proccess before saving
     Select(".notdef")
     DetachAndRemoveGlyphs()
@@ -421,11 +661,29 @@ Quit()
 _EOT_
 
 ########################################
-# Generate 0xProGu
+# Generate 0xProGen
 ########################################
 
+echo "Generate Comma HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${comma_hackgen_generator} \
+    2> ${redirection_stderr} || exit 4
+echo "Generate Period HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${period_hackgen_generator} \
+    2> ${redirection_stderr} || exit 4
+echo "Generate Colon HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${colon_hackgen_generator} \
+    2> ${redirection_stderr} || exit 4
 echo "Generate Modified 0xProto"
 ${FONTFORGE_COMMAND} -script ${tmpdir}/${modified_proto_generator} \
+    2> ${redirection_stderr} || exit 4
+echo "Generate Zenkaku Comma HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${zenkaku_comma_generator} \
+    2> ${redirection_stderr} || exit 4
+echo "Generate Zenkaku Period HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${zenkaku_period_generator} \
+    2> ${redirection_stderr} || exit 4
+echo "Generate Zenkaku Colon HackGen"
+${FONTFORGE_COMMAND} -script ${tmpdir}/${zenkaku_colon_generator} \
     2> ${redirection_stderr} || exit 4
 echo "Generate Zenkaku 0xProto"
 ${FONTFORGE_COMMAND} -script ${tmpdir}/${zenkaku_proto_generator} \

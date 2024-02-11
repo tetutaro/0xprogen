@@ -6,7 +6,7 @@ Japanese Font for programming ([0xProto](https://github.com/0xType/0xProto) + [H
 
 * Install fontforge and python3-fontforge
     * `sudo apt install fontforge python3-fontforge`
-* Clone the nerd-fonts repository
+* (Optional) Clone the nerd-fonts repository
     * `git clone https://github.com/ryanoasis/nerd-fonts.git`
     * This repository is huge and takes a long time to clone
 * Invoke the shell script
