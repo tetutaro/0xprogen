@@ -11,3 +11,7 @@ Japanese Font for programming ([0xProto](https://github.com/0xType/0xProto) + [H
     * This repository is huge and takes a long time to clone
 * Invoke the shell script
     * `./generate.sh`
+
+## Sample
+
+![sample](font_sample.png)
