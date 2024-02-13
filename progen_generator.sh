@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # basic information
-PROGEN_VERSION="0.3.0"
+PROGEN_VERSION="0.3.1"
 PROGEN_FAMILYNAME="0xProGen"
 
 # path of fontforge command
@@ -531,7 +531,7 @@ while (i < SizeOf(input_list))
     Select(0u005c); Move(180, 0); Scale(115, 115, 500, 315); Rotate(14, 500, 315)
     Copy(); Select(0uff3c); PasteInto(); OverlapIntersect(); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    Select(0uff5c); Scale(115, 100, 500, 0)
+    Select(0uff5c); Scale(115, 100, 500, 0); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear other glyphs
     Select(0uff01, 0uff5e); SelectInvert(); Clear()
