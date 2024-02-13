@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # basic information
-PROGEN_VERSION="0.2.0"
+PROGEN_VERSION="0.2.1"
 PROGEN_FAMILYNAME="0xProGen"
 
 # path of fontforge command
@@ -613,13 +613,13 @@ while (i < SizeOf(fontstyle_list))
     SetOS2Value("TypoDescentIsOffset",     0)
     SetOS2Value("HHeadAscentIsOffset",     0)
     SetOS2Value("HHeadDescentIsOffset",    0)
-    SetOS2Value("WinAscent",             850)
-    SetOS2Value("WinDescent",            150)
+    SetOS2Value("WinAscent",             900)
+    SetOS2Value("WinDescent",            200)
     SetOS2Value("TypoAscent",            850)
-    SetOS2Value("TypoDescent",          -150)
-    SetOS2Value("TypoLineGap",             0)
-    SetOS2Value("HHeadAscent",           850)
-    SetOS2Value("HHeadDescent",         -150)
+    SetOS2Value("TypoDescent",          -200)
+    SetOS2Value("TypoLineGap",            50)
+    SetOS2Value("HHeadAscent",           900)
+    SetOS2Value("HHeadDescent",         -200)
     SetOS2Value("HHeadLineGap",            0)
     SetPanose([2, 11, panoseweight_list[i], 9, 2, 2, 3, 2, 2, 7])
     # Merge
