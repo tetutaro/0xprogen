@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # basic information
-PROGEN_VERSION="0.2.1"
+PROGEN_VERSION="0.3.0"
 PROGEN_FAMILYNAME="0xProGen"
 
 # path of fontforge command
@@ -183,7 +183,7 @@ while (i < SizeOf(input_list))
     Select(0u002c); Clear()
     Select(0u002e); Clear()
     Select(0u003a, 0u003b); Clear()
-    # Remove zenkaku basic symbols
+    # Remove Zenkaku basic symbols
     Select(0uff01, 0uff5e); Clear();
     # Remove ambigous glyphs
     Select(0u00a1); Clear()
@@ -514,8 +514,7 @@ while (i < SizeOf(input_list))
     Select(0u0021, 0u007e); Copy(); Select(0uff01, 0uff5e); Paste()
     Move(190, 0); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    Select(0uff01, 0uff5e); SelectInvert(); Clear()
-    # Remove Zenkaku exclamation, question, comma, period, colon and semi-colon
+    # Remove Zenkaku comma, period, colon and semi-colon
     Select(0uff0c); Clear()
     Select(0uff0e); Clear()
     Select(0uff1a, 0uff1b); Clear()
@@ -523,6 +522,19 @@ while (i < SizeOf(input_list))
     MergeFonts(zcomma_list[i])
     MergeFonts(zperiod_list[i])
     MergeFonts(zcolon_list[i])
+    # Widen Zenkaku slash, back-slash and vertical bar
+    Select(0uff0f); Move(20, 0); Scale(200, 100, 500, 0)
+    Select(0u002f); Move(210, 0); Scale(115, 115, 500, 315); Rotate(-14, 500, 315)
+    Copy(); Select(0uff0f); PasteInto(); OverlapIntersect(); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    Select(0uff3c); Move(-10, 0); Scale(200, 100, 500, 0)
+    Select(0u005c); Move(180, 0); Scale(115, 115, 500, 315); Rotate(14, 500, 315)
+    Copy(); Select(0uff3c); PasteInto(); OverlapIntersect(); SetWidth(1000)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    Select(0uff5c); Scale(115, 100, 500, 0)
+    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Clear other glyphs
+    Select(0uff01, 0uff5e); SelectInvert(); Clear()
     # Clear instructions
     SelectWorthOutputting()
     ClearInstrs()
@@ -638,7 +650,7 @@ while (i < SizeOf(fontstyle_list))
     PasteWithOffset(410, 0); PasteWithOffset(-410, 0)
     OverlapIntersect(); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Edit zenkaku hyphen
+    # Edit Zenkaku hyphen
     Select(0uff0d); Copy(); Select(0u2010); Paste(); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Edit katakana small "he"
