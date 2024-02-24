@@ -5,7 +5,7 @@ PROGEN_VERSION="0.3.1"
 PROGEN_FAMILYNAME="0xProGen"
 
 # path of fontforge command
-FONTFORGE_COMMAND="/usr/bin/fontforge"
+FONTFORGE_COMMAND="fontforge"
 
 # temporally flag
 leaving_tmp_flag="false"

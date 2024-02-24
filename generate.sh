@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-FONTFORGE_PYTHON="/bin/python3"
+FONTFORGE_PYTHON="python3"
 FONTS_DIR="fonts"
 PROTO_VERSION="1.601"
 HACKGEN_VERSION="2.9.0"
