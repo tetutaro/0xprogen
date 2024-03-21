@@ -2,25 +2,25 @@
 
 # basic information
 PROGEN_VERSION="0.3.1"
-PROGEN_FAMILYNAME="0xProGen"
+PROGEN_FAMILYNAME="0xProGenW"
 
 # path of fontforge command
-FONTFORGE_COMMAND="/usr/bin/fontforge"
+FONTFORGE_COMMAND="fontforge"
 
 # temporally flag
 leaving_tmp_flag="false"
 
 # null device
-redirection_stderr="/dev/null"
+redirection_stderr="/dev/stderr"
 
 # path of original fonts
 input_proto_regular="0xProto-Regular.ttf"
 input_hackgen_regular="HackGen-Regular.ttf"
 
 # intermediate fonts
-comma_hackgen_regular="Comma-HackGen-Regular.sfd"
-period_hackgen_regular="Period-HackGen-Regular.sfd"
-colon_hackgen_regular="Colon-HackGen-Regular.sdf"
+# comma_hackgen_regular="Comma-HackGen-Regular.sfd"
+# period_hackgen_regular="Period-HackGen-Regular.sfd"
+# colon_hackgen_regular="Colon-HackGen-Regular.sdf"
 modified_proto_regular="Modified-0xProto-Regular.sfd"
 zenkaku_comma_regular="Zenkaku-Comma-Regular.sfd"
 zenkaku_period_regular="Zenkaku-Period-Regular.sfd"
@@ -29,9 +29,9 @@ zenkaku_proto_regular="Zenkaku-0xProto-Regular.sfd"
 modified_hackgen_regular="Modified-HackGen-Regular.sfd"
 
 # fontforge scripts
-comma_hackgen_generator="comma_hackgen_generator.pe"
-period_hackgen_generator="period-hackgen_generator.pe"
-colon_hackgen_generator="colon_hackgen_generator.pe"
+# comma_hackgen_generator="comma_hackgen_generator.pe"
+# period_hackgen_generator="period-hackgen_generator.pe"
+# colon_hackgen_generator="colon_hackgen_generator.pe"
 modified_proto_generator="modified_proto_generator.pe"
 zenkaku_comma_generator="zenkaku_comma_generator.pe"
 zenkaku_period_generator="zenkaku_period_generator.pe"
@@ -64,101 +64,101 @@ else
     trap "echo 'Abnormally terminated'; exit 3" HUP INT QUIT
 fi
 
-########################################
-# extract comma from HackGen
-########################################
+# ########################################
+# # extract comma from HackGen
+# ########################################
 
-cat > ${tmpdir}/${comma_hackgen_generator} << _EOT_
-#!${FONTFORGE_COMMAND} -script
+# cat > ${tmpdir}/${comma_hackgen_generator} << _EOT_
+# #!${FONTFORGE_COMMAND} -script
 
-input_list = ["${input_hackgen_regular}"]
-output_list = ["${comma_hackgen_regular}"]
-i = 0
-while (i < SizeOf(input_list))
-    # Open
-    Open(input_list[i])
-    SelectWorthOutputting()
-    UnlinkReference()
-    ScaleToEm(800, 200)
-    # Clear other glyphs
-    Select(0u002c); SelectInvert(); Clear()
-    # Adjust
-    Select(0u002c); Move(-20, 0); SetWidth(500)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Clear instructions
-    SelectWorthOutputting()
-    ClearInstrs()
-    # Save
-    Save("${tmpdir}/" + output_list[i])
-    Close()
-    i += 1
-endloop
-Quit()
-_EOT_
+# input_list = ["${input_hackgen_regular}"]
+# output_list = ["${comma_hackgen_regular}"]
+# i = 0
+# while (i < SizeOf(input_list))
+#     # Open
+#     Open(input_list[i])
+#     SelectWorthOutputting()
+#     UnlinkReference()
+#     ScaleToEm(800, 200)
+#     # Clear other glyphs
+#     Select(0u002c); SelectInvert(); Clear()
+#     # Adjust
+#     Select(0u002c); Move(-20, 0); SetWidth(500)
+#     RoundToInt(); RemoveOverlap(); RoundToInt()
+#     # Clear instructions
+#     SelectWorthOutputting()
+#     ClearInstrs()
+#     # Save
+#     Save("${tmpdir}/" + output_list[i])
+#     Close()
+#     i += 1
+# endloop
+# Quit()
+# _EOT_
 
-########################################
-# extract period from HackGen
-########################################
+# ########################################
+# # extract period from HackGen
+# ########################################
 
-cat > ${tmpdir}/${period_hackgen_generator} << _EOT_
-#!${FONTFORGE_COMMAND} -script
+# cat > ${tmpdir}/${period_hackgen_generator} << _EOT_
+# #!${FONTFORGE_COMMAND} -script
 
-input_list = ["${input_hackgen_regular}"]
-output_list = ["${period_hackgen_regular}"]
-i = 0
-while (i < SizeOf(input_list))
-    # Open
-    Open(input_list[i])
-    SelectWorthOutputting()
-    UnlinkReference()
-    ScaleToEm(800, 200)
-    # Clear other glyphs
-    Select(0u002e); SelectInvert(); Clear()
-    # Adjust
-    Select(0u002e); Move(-20, 0); SetWidth(500)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Clear instructions
-    SelectWorthOutputting()
-    ClearInstrs()
-    # Save
-    Save("${tmpdir}/" + output_list[i])
-    Close()
-    i += 1
-endloop
-Quit()
-_EOT_
+# input_list = ["${input_hackgen_regular}"]
+# output_list = ["${period_hackgen_regular}"]
+# i = 0
+# while (i < SizeOf(input_list))
+#     # Open
+#     Open(input_list[i])
+#     SelectWorthOutputting()
+#     UnlinkReference()
+#     ScaleToEm(800, 200)
+#     # Clear other glyphs
+#     Select(0u002e); SelectInvert(); Clear()
+#     # Adjust
+#     Select(0u002e); Move(-20, 0); SetWidth(500)
+#     RoundToInt(); RemoveOverlap(); RoundToInt()
+#     # Clear instructions
+#     SelectWorthOutputting()
+#     ClearInstrs()
+#     # Save
+#     Save("${tmpdir}/" + output_list[i])
+#     Close()
+#     i += 1
+# endloop
+# Quit()
+# _EOT_
 
-########################################
-# extract colon and semi-colon from HackGen
-########################################
+# ########################################
+# # extract colon and semi-colon from HackGen
+# ########################################
 
-cat > ${tmpdir}/${colon_hackgen_generator} << _EOT_
-#!${FONTFORGE_COMMAND} -script
+# cat > ${tmpdir}/${colon_hackgen_generator} << _EOT_
+# #!${FONTFORGE_COMMAND} -script
 
-input_list = ["${input_hackgen_regular}"]
-output_list = ["${colon_hackgen_regular}"]
-i = 0
-while (i < SizeOf(input_list))
-    # Open
-    Open(input_list[i])
-    SelectWorthOutputting()
-    UnlinkReference()
-    ScaleToEm(800, 200)
-    # Clear other glyphs
-    Select(0u003a, 0u003b); SelectInvert(); Clear()
-    # Adjust
-    Select(0u003a, 0u003b); Move(-20, 0); SetWidth(500)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Clear instructions
-    SelectWorthOutputting()
-    ClearInstrs()
-    # Save
-    Save("${tmpdir}/" + output_list[i])
-    Close()
-    i += 1
-endloop
-Quit()
-_EOT_
+# input_list = ["${input_hackgen_regular}"]
+# output_list = ["${colon_hackgen_regular}"]
+# i = 0
+# while (i < SizeOf(input_list))
+#     # Open
+#     Open(input_list[i])
+#     SelectWorthOutputting()
+#     UnlinkReference()
+#     ScaleToEm(800, 200)
+#     # Clear other glyphs
+#     Select(0u003a, 0u003b); SelectInvert(); Clear()
+#     # Adjust
+#     Select(0u003a, 0u003b); Move(-20, 0); SetWidth(500)
+#     RoundToInt(); RemoveOverlap(); RoundToInt()
+#     # Clear instructions
+#     SelectWorthOutputting()
+#     ClearInstrs()
+#     # Save
+#     Save("${tmpdir}/" + output_list[i])
+#     Close()
+#     i += 1
+# endloop
+# Quit()
+# _EOT_
 
 ########################################
 # Generate script for modified 0xProto
@@ -169,9 +169,9 @@ cat > ${tmpdir}/${modified_proto_generator} << _EOT_
 
 input_list = ["${input_proto_regular}"]
 output_list = ["${modified_proto_regular}"]
-comma_list = ["${tmpdir}/${comma_hackgen_regular}"]
-period_list = ["${tmpdir}/${period_hackgen_regular}"]
-colon_list = ["${tmpdir}/${colon_hackgen_regular}"]
+# comma_list = ["${tmpdir}/${comma_hackgen_regular}"]
+# period_list = ["${tmpdir}/${period_hackgen_regular}"]
+# colon_list = ["${tmpdir}/${colon_hackgen_regular}"]
 i = 0
 while (i < SizeOf(input_list))
     # Open
@@ -179,10 +179,10 @@ while (i < SizeOf(input_list))
     SelectWorthOutputting()
     UnlinkReference()
     ScaleToEm(800, 200)
-    # Remove comma, period, colon and semi-colon
-    Select(0u002c); Clear()
-    Select(0u002e); Clear()
-    Select(0u003a, 0u003b); Clear()
+    # # Remove comma, period, colon and semi-colon
+    # Select(0u002c); Clear()
+    # Select(0u002e); Clear()
+    # Select(0u003a, 0u003b); Clear()
     # Remove Zenkaku basic symbols
     Select(0uff01, 0uff5e); Clear();
     # Remove ambigous glyphs
@@ -327,8 +327,8 @@ while (i < SizeOf(input_list))
     Select(0u2460, 0u249b); Clear()
     Select(0u249c, 0u24e9); Clear()
     Select(0u24eb, 0u24ff); Clear()
-    Select(0u2500, 0u254b); Clear()
-    Select(0u2550, 0u2573); Clear()
+    # Select(0u2500, 0u254b); Clear()
+    # Select(0u2550, 0u2573); Clear()
     Select(0u2580, 0u258f); Clear()
     Select(0u2592, 0u2595); Clear()
     Select(0u25a0, 0u25a1); Clear()
@@ -375,14 +375,14 @@ while (i < SizeOf(input_list))
     Select(0ue000, 0uf8ff); Clear()
     Select(0ufe00, 0ufe0f); Clear()
     Select(0ufffd); Clear()
-    # Narrow all the width
+    # # Narrow all the width
     SelectWorthOutputting()
-    Scale(80, 100); Move(-60, 0); SetWidth(500)
+    # Scale(80, 100); Move(-60, 0); SetWidth(500)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Merge Hackgen's comma, period, colon and semi-colon
-    MergeFonts(comma_list[i])
-    MergeFonts(period_list[i])
-    MergeFonts(colon_list[i])
+    # # Merge Hackgen's comma, period, colon and semi-colon
+    # MergeFonts(comma_list[i])
+    # MergeFonts(period_list[i])
+    # MergeFonts(colon_list[i])
     # Clear instructions
     SelectWorthOutputting()
     ClearInstrs()
@@ -413,7 +413,9 @@ while (i < SizeOf(input_list))
     # Clear other glyphs
     Select(0uff0c); SelectInvert(); Clear()
     # Adjust
-    Select(0uff0c); Move(-30, 0); SetWidth(1000)
+    Select(0uff0c);
+    # Move(-30, 0);
+    SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear instructions
     SelectWorthOutputting()
@@ -445,7 +447,9 @@ while (i < SizeOf(input_list))
     # Clear other glyphs
     Select(0uff0e); SelectInvert(); Clear()
     # Adjust
-    Select(0uff0e); Move(-30, 0); SetWidth(1000)
+    Select(0uff0e);
+    Move(-30, 0);
+    SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear instructions
     SelectWorthOutputting()
@@ -477,7 +481,9 @@ while (i < SizeOf(input_list))
     # Clear other glyphs
     Select(0uff1a, 0uff1b); SelectInvert(); Clear()
     # Adjust
-    Select(0uff1a, 0uff1b); Move(-30, 0); SetWidth(1000)
+    Select(0uff1a, 0uff1b);
+    Move(-30, 0);
+    SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear instructions
     SelectWorthOutputting()
@@ -512,7 +518,9 @@ while (i < SizeOf(input_list))
     # Cut and Paste
     Select(0u0021, 0u007e); SelectInvert(); Clear()
     Select(0u0021, 0u007e); Copy(); Select(0uff01, 0uff5e); Paste()
-    Move(190, 0); SetWidth(1000)
+    Scale(150,100);
+    Move(320, 0);
+    SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Remove Zenkaku comma, period, colon and semi-colon
     Select(0uff0c); Clear()
@@ -525,13 +533,13 @@ while (i < SizeOf(input_list))
     # Widen Zenkaku slash, back-slash and vertical bar
     Select(0uff0f); Move(20, 0); Scale(200, 100, 500, 0)
     Select(0u002f); Move(210, 0); Scale(115, 115, 500, 315); Rotate(-14, 500, 315)
-    Copy(); Select(0uff0f); PasteInto(); OverlapIntersect(); SetWidth(1000)
+    Copy(); Select(0uff0f); PasteInto(); OverlapIntersect(); SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     Select(0uff3c); Move(-10, 0); Scale(200, 100, 500, 0)
     Select(0u005c); Move(180, 0); Scale(115, 115, 500, 315); Rotate(14, 500, 315)
-    Copy(); Select(0uff3c); PasteInto(); OverlapIntersect(); SetWidth(1000)
+    Copy(); Select(0uff3c); PasteInto(); OverlapIntersect(); SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
-    Select(0uff5c); Scale(115, 100, 500, 0); SetWidth(1000)
+    Select(0uff5c); Scale(115, 100, 500, 0); SetWidth(1240)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear other glyphs
     Select(0uff01, 0uff5e); SelectInvert(); Clear()
@@ -563,8 +571,10 @@ while (i < SizeOf(input_list))
     UnlinkReference()
     ScaleToEm(800, 200)
     # Adjust
-    SelectWorthOutputting()
-    Scale(93, 100); Move(-30, 0); SetWidth(1000)
+    SelectWorthOutputting();
+    Scale(107.05, 107.05, 0, 0); # Scale(93, 100);
+    # Move(100, 0); # Move(-30, 0);
+    SetWidth(110, 2)
     RoundToInt(); RemoveOverlap(); RoundToInt()
     # Clear instructions
     SelectWorthOutputting()
@@ -640,23 +650,23 @@ while (i < SizeOf(fontstyle_list))
     MergeFonts(hackgen_list[i])
     # Edit Zenkaku Space (dotted circle)
     # Select(0u25cc); Copy(); Select(0u3000); Paste()
-    # Edit en dash
-    Select(0u2013); Copy()
-    PasteWithOffset(264, 0); PasteWithOffset(-264, 0)
-    OverlapIntersect(); SetWidth(1000)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Edit em dash
-    Select(0u2014); Copy()
-    PasteWithOffset(410, 0); PasteWithOffset(-410, 0)
-    OverlapIntersect(); SetWidth(1000)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Edit Zenkaku hyphen
-    Select(0uff0d); Copy(); Select(0u2010); Paste(); SetWidth(1000)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
-    # Edit katakana small "he"
-    Select(0u30d8); Copy(); Select(0u31f8); Paste()
-    Scale(79, 79, 450, 356); Move(0, -80); SetWidth(1000)
-    RoundToInt(); RemoveOverlap(); RoundToInt()
+    # # Edit en dash
+    # Select(0u2013); Copy()
+    # PasteWithOffset(264, 0); PasteWithOffset(-264, 0)
+    # OverlapIntersect(); SetWidth(1240)
+    # RoundToInt(); RemoveOverlap(); RoundToInt()
+    # # Edit em dash
+    # Select(0u2014); Copy()
+    # PasteWithOffset(410, 0); PasteWithOffset(-410, 0)
+    # OverlapIntersect(); SetWidth(1240)
+    # RoundToInt(); RemoveOverlap(); RoundToInt()
+    # # Edit Zenkaku hyphen
+    # Select(0uff0d); Copy(); Select(0u2010); Paste(); SetWidth(1240)
+    # RoundToInt(); RemoveOverlap(); RoundToInt()
+    # # Edit katakana small "he"
+    # Select(0u30d8); Copy(); Select(0u31f8); Paste()
+    # Scale(79, 79, 450, 356); Move(0, -80); SetWidth(1240)
+    # RoundToInt(); RemoveOverlap(); RoundToInt()
     # Proccess before saving
     Select(".notdef")
     DetachAndRemoveGlyphs()
@@ -676,15 +686,15 @@ _EOT_
 # Generate 0xProGen
 ########################################
 
-echo "Generate Comma HackGen"
-${FONTFORGE_COMMAND} -script ${tmpdir}/${comma_hackgen_generator} \
-    2> ${redirection_stderr} || exit 4
-echo "Generate Period HackGen"
-${FONTFORGE_COMMAND} -script ${tmpdir}/${period_hackgen_generator} \
-    2> ${redirection_stderr} || exit 4
-echo "Generate Colon HackGen"
-${FONTFORGE_COMMAND} -script ${tmpdir}/${colon_hackgen_generator} \
-    2> ${redirection_stderr} || exit 4
+# echo "Generate Comma HackGen"
+# ${FONTFORGE_COMMAND} -script ${tmpdir}/${comma_hackgen_generator} \
+#     2> ${redirection_stderr} || exit 4
+# echo "Generate Period HackGen"
+# ${FONTFORGE_COMMAND} -script ${tmpdir}/${period_hackgen_generator} \
+#     2> ${redirection_stderr} || exit 4
+# echo "Generate Colon HackGen"
+# ${FONTFORGE_COMMAND} -script ${tmpdir}/${colon_hackgen_generator} \
+#     2> ${redirection_stderr} || exit 4
 echo "Generate Modified 0xProto"
 ${FONTFORGE_COMMAND} -script ${tmpdir}/${modified_proto_generator} \
     2> ${redirection_stderr} || exit 4

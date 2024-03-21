@@ -21,7 +21,7 @@ def rename(font: str, outputdir: Optional[str]) -> None:
     wei = list()
     pat = list()
     for name in sourceFont.fullname.strip().split():
-        if name in ["0xProGen", "Diminished", "Discord"]:
+        if name in ["0xProGenW", "0xProGen", "Diminished", "Discord"]:
             fam.append(name)
         elif name in ["Regular", "Bold", "Oblique"]:
             if name == "Oblique":
