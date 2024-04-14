@@ -657,6 +657,9 @@ while (i < SizeOf(fontstyle_list))
     Select(0u30d8); Copy(); Select(0u31f8); Paste()
     Scale(79, 79, 450, 356); Move(0, -80); SetWidth(1000)
     RoundToInt(); RemoveOverlap(); RoundToInt()
+    # Remove Powerline Fonts
+    Select(0ue0a0, 0ue0a3); Clear()
+    Select(0ue0b0, 0ue0d7); Clear()
     # Proccess before saving
     Select(".notdef")
     DetachAndRemoveGlyphs()
